@@ -28,11 +28,14 @@
 
     <script>
         document.getElementById('getTokenButton').addEventListener('click', function() {
-            fetch('http://your-server-ip/api/generate-token.php') // Replace with your API endpoint
+            // Substitua pelo URL da sua API Gateway
+            const apiUrl = 'arn:aws:apigateway:us-east-1::/apis/hwu5xkw240/routes/gyy1o94';
+
+            fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 if (data.token) {
-                    localStorage.setItem('apiToken', data.token); // Store the token
+                    localStorage.setItem('apiToken', data.token); // Armazena o token
                     document.getElementById('response').innerText = `Token: ${data.token}`;
                 } else {
                     document.getElementById('response').innerText = data.error || 'Unknown error occurred.';
