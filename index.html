@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>API Documentation</title>
+    <title>Token Acquisition</title>
     <style>
         body { font-family: Arial, sans-serif; }
         .container { width: 80%; margin: 0 auto; }
         h1 { text-align: center; }
         .form-container { max-width: 600px; margin: 0 auto; }
-        label { display: block; margin: 10px 0 5px; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 8px; margin-bottom: 10px; }
         button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
         button:hover { background-color: #0056b3; }
         .response { margin-top: 20px; }
@@ -18,40 +16,27 @@
 </head>
 <body>
     <div class="container">
-        <h1>API Documentation</h1>
-        <p>Welcome to the API documentation. Here you can find information about the endpoints and how to acquire tokens.</p>
-        
+        <h1>Acquire Token</h1>
+        <p>Click the button below to acquire a token. The token will expire after a set period.</p>
+
         <div class="form-container">
-            <h2>Acquire Token</h2>
-            <form id="tokenForm">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Get Token</button>
-            </form>
+            <button id="getTokenButton">Get Token</button>
 
             <div class="response" id="response"></div>
         </div>
     </div>
 
     <script>
-        document.getElementById('tokenForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            fetch('http://your-server-ip/api/users.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
-            })
+        document.getElementById('getTokenButton').addEventListener('click', function() {
+            fetch('http://your-server-ip/api/generate-token.php') // Replace with your API endpoint
             .then(response => response.json())
             .then(data => {
-                document.getElementById('response').innerText = `Token: ${data.token || data.error}`;
+                if (data.token) {
+                    localStorage.setItem('apiToken', data.token); // Store the token
+                    document.getElementById('response').innerText = `Token: ${data.token}`;
+                } else {
+                    document.getElementById('response').innerText = data.error || 'Unknown error occurred.';
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
