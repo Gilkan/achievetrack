@@ -38,7 +38,7 @@
                     localStorage.setItem('apiToken', data.token); // Armazena o token
                     document.getElementById('response').innerText = `Token: ${data.token}`;
                 } else {
-                    document.getElementById('response').innerText = data.error || 'Unknown error occurred.';
+                    document.getElementById('response').innerText = data.message || 'Unknown error occurred.';
                 }
             })
             .catch(error => {
