@@ -14,18 +14,19 @@
         .response { margin-top: 20px; }
         .documentation { margin-top: 20px; }
         .warning { margin-top: 20px; padding: 10px; background-color: #ffcccc; color: #d8000c; border: 1px solid #d8000c; border-radius: 5px; }
+        .note { margin-top: 10px; padding: 10px; background-color: #e7f0ff; color: #004085; border: 1px solid #004085; border-radius: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Acquire Token</h1>
         <p>Click the button below to acquire a token. The token will expire after a set period.</p>
-        
+
         <div class="warning">
             <strong>Warning:</strong> If you lose your token, it cannot be recovered. You will need to create a new one.
         </div>
 
-        <div class="form-container">
+        <div class="form-container" style="margin-top: 30px;">
             <button id="getTokenButton">Get Token</button>
 
             <div class="response" id="response"></div>
@@ -35,76 +36,78 @@
             <h2>API Documentation</h2>
             <h3>Create/Update Achievement</h3>
             <pre>
-POST https://your-api-endpoint.amazonaws.com/achievement
+POST https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
     "action": "create",
-    "userId": "string",
-    "token": "string",
-    "name": "string",
-    "description": "string",
-    "goal": "number",
-    "details": "string",
-    "progress": "number",
-    "dateAchieved": "string"
+    "userId": "string"     // Required: User ID
+    "token": "string"      // Required: Token
+    "name": "string"       // Required: Achievement Name
+    "description": "string"// Optional: Achievement Description
+    "goal": "number"       // Optional: Achievement Goal
+    "details": "string"    // Optional: Additional Details
+    "progress": "number"   // Optional: Current Progress (default: 0)
+    "dateAchieved": "string" // Optional: Date Achieved (default: empty string)
 }
             </pre>
 
             <h3>Get Achievements List</h3>
             <pre>
-GET https://your-api-endpoint.amazonaws.com/achievement
+GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
     "action": "get_list",
-    "token": "string"
+    "token": "string"      // Required: Token
 }
             </pre>
 
             <h3>Get User Achievement</h3>
             <pre>
-GET https://your-api-endpoint.amazonaws.com/achievement
+GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
     "action": "get_user_achievement",
-    "userId": "string",
-    "token": "string",
-    "name": "string"
+    "userId": "string",    // Required: User ID
+    "token": "string",     // Required: Token
+    "name": "string"       // Required: Achievement Name
 }
             </pre>
 
             <h3>Get Achievement</h3>
             <pre>
-GET https://your-api-endpoint.amazonaws.com/achievement
+GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
     "action": "get_achievement",
-    "token": "string",
-    "name": "string"
+    "token": "string",     // Required: Token
+    "name": "string"       // Required: Achievement Name
 }
             </pre>
 
             <h3>Delete Achievement</h3>
             <pre>
-DELETE https://your-api-endpoint.amazonaws.com/achievement
+DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
     "action": "delete",
-    "userId": "string",
-    "token": "string",
-    "name": "string"
+    "userId": "string",    // Required: User ID
+    "token": "string",     // Required: Token
+    "name": "string"       // Required: Achievement Name
 }
             </pre>
+
+            <div class="note">
+                <strong>Note:</strong> The last token received is stored in localStorage under 'apiToken'. If you need to recover it and haven't overwritten or cleared the storage, you can find it there.
+            </div>
         </div>
     </div>
 
     <script>
         document.getElementById('getTokenButton').addEventListener('click', function() {
-            // Substitua pelo URL da sua API Gateway
-            const apiUrl = 'https://your-api-endpoint.amazonaws.com/achievement';
+            const apiUrl = 'https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy';
 
             fetch(apiUrl, {
-                method: 'POST', // Ensure this matches your API method for token creation
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    action: 'create', // Specify the action for token creation
-                    userId: 'exampleUserId' // Replace with actual userId if needed
+                    action: 'create' // Specify the action for token creation
                 })
             })
             .then(response => response.json())
