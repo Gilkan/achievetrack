@@ -5,21 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Token Acquisition</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: 0 auto; }
-        h1 { text-align: center; }
-        .form-container { max-width: 600px; margin: 0 auto; }
-        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
-        .response { margin-top: 20px; }
-        .warning { margin-top: 20px; padding: 10px; background-color: #ffcccc; color: #d8000c; border: 1px solid #d8000c; border-radius: 5px; }
-        .note { margin-top: 10px; padding: 10px; background-color: #e7f0ff; color: #004085; border: 1px solid #004085; border-radius: 5px; }
-        .collapsible-button { cursor: pointer; padding: 10px; background-color: #007bff; color: white; border: none; text-align: left; width: 100%; }
-        .collapsible-button:hover { background-color: #0056b3; }
-        .collapsible-content { display: none; margin-top: 10px; }
-        .collapsible-content.show { display: block; }
-        .required { color: yellow; }
-        .optional { color: rgba(0, 0, 0, 0.9); }
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #121212; 
+            color: #e0e0e0; 
+            margin: 0; 
+            padding: 0;
+        }
+        .container { 
+            width: 80%; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        h1, h2, h3 { 
+            color: #e0e0e0; 
+            text-align: center; 
+        }
+        .form-container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            border: 1px solid #333; 
+            border-radius: 5px; 
+            padding: 20px; 
+            background-color: #1e1e1e; 
+        }
+        button { 
+            padding: 10px 15px; 
+            background-color: #1e88e5; 
+            color: #fff; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 5px;
+        }
+        button:hover { 
+            background-color: #1565c0; 
+        }
+        .response { 
+            margin-top: 20px; 
+            padding: 10px; 
+            border: 1px solid #333; 
+            border-radius: 5px; 
+            background-color: #1e1e1e; 
+        }
+        .warning { 
+            margin-top: 20px; 
+            padding: 10px; 
+            background-color: #d32f2f; 
+            color: #fff; 
+            border: 1px solid #c62828; 
+            border-radius: 5px; 
+        }
+        .note { 
+            margin-top: 10px; 
+            padding: 10px; 
+            background-color: #1976d2; 
+            color: #fff; 
+            border: 1px solid #1565c0; 
+            border-radius: 5px; 
+        }
+        .collapsible-button { 
+            cursor: pointer; 
+            padding: 10px; 
+            background-color: #1e88e5; 
+            color: #fff; 
+            border: none; 
+            text-align: left; 
+            width: 100%; 
+            border-radius: 5px; 
+        }
+        .collapsible-button:hover { 
+            background-color: #1565c0; 
+        }
+        .collapsible-content { 
+            display: none; 
+            margin-top: 10px; 
+            border: 1px solid #333; 
+            border-radius: 5px; 
+            padding: 10px; 
+            background-color: #1e1e1e; 
+        }
+        .collapsible-content.show { 
+            display: block; 
+        }
+        .required { 
+            color: #ffab00; /* Yellow color for required fields */
+        }
+        .optional { 
+            color: #b0bec5; /* Light grey for optional fields */
+        }
+        .secret-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #1e1e1e;
+        }
     </style>
 </head>
 <body>
@@ -31,10 +111,17 @@
             <strong>Warning:</strong> If you lose your token, it cannot be recovered. You will need to create a new one.
         </div>
 
-        <div class="form-container" style="margin-top: 30px;">
+        <div class="form-container">
             <button id="getTokenButton">Get Token</button>
 
             <div class="response" id="response"></div>
+        </div>
+
+        <div class="secret-section">
+            <button class="collapsible-button" onclick="toggleEnvironment()">Toggle Environment</button>
+            <div class="collapsible-content" id="secretContent">
+                <p><strong>Current Environment:</strong> <span id="currentEnvironment">desenvolvimento</span></p>
+            </div>
         </div>
 
         <div class="documentation">
@@ -44,7 +131,7 @@
 
                 <h3>Create/Update Achievement</h3>
                 <pre>
-POST https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
+POST https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/{environment}/tokensFunctionPy
 {
     "action": "create",                   // <span class="required">Required</span>
     "userId": "string",                  // <span class="required">Required: User ID</span>
@@ -60,7 +147,7 @@ POST https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/toke
 
                 <h3>Get Achievements List</h3>
                 <pre>
-GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
+GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/{environment}/tokensFunctionPy
 {
     "action": "get_list",                // <span class="required">Required</span>
     "token": "string"                    // <span class="required">Required: Token</span>
@@ -69,7 +156,7 @@ GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/token
 
                 <h3>Get User Achievement</h3>
                 <pre>
-GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
+GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/{environment}/tokensFunctionPy
 {
     "action": "get_user_achievement",    // <span class="required">Required</span>
     "userId": "string",                  // <span class="required">Required: User ID</span>
@@ -80,7 +167,7 @@ GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/token
 
                 <h3>Get Achievement</h3>
                 <pre>
-GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
+GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/{environment}/tokensFunctionPy
 {
     "action": "get_achievement",         // <span class="required">Required</span>
     "token": "string",                   // <span class="required">Required: Token</span>
@@ -90,7 +177,7 @@ GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/token
 
                 <h3>Delete Achievement</h3>
                 <pre>
-DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
+DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/{environment}/tokensFunctionPy
 {
     "action": "delete",                  // <span class="required">Required</span>
     "userId": "string",                  // <span class="required">Required: User ID</span>
@@ -98,17 +185,24 @@ DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/to
     "name": "string"                    // <span class="required">Required: Achievement Name</span>
 }
                 </pre>
-
-                <div class="note">
-                    <strong>Note:</strong> The last token received is stored in localStorage under 'apiToken'. If you need to recover it and haven't overwritten or cleared the storage, you can find it there.
-                </div>
             </div>
+        </div>
+
+        <div class="note">
+            <strong>Note:</strong> The last token received is stored in localStorage under 'apiToken'. If you need to recover it and haven't overwritten or cleared the storage, you can find it there.
         </div>
     </div>
 
     <script>
+        let environment = 'desenvolvimento';
+
+        function toggleEnvironment() {
+            environment = environment === 'desenvolvimento' ? 'production' : 'desenvolvimento';
+            document.getElementById('currentEnvironment').innerText = environment;
+        }
+
         document.getElementById('getTokenButton').addEventListener('click', function() {
-            const apiUrl = 'https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy';
+            const apiUrl = `https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/${environment}/tokensFunctionPy`;
 
             fetch(apiUrl, {
                 method: 'POST',
