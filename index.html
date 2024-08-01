@@ -56,7 +56,7 @@
             border-radius: 5px; 
         }
         .note { 
-            margin-top: 10px; 
+            margin-top: 20px; 
             padding: 10px; 
             background-color: #1976d2; 
             color: #fff; 
@@ -93,13 +93,6 @@
         .optional { 
             color: #b0bec5; /* Light grey for optional fields */
         }
-        .secret-section {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #333;
-            border-radius: 5px;
-            background-color: #1e1e1e;
-        }
     </style>
 </head>
 <body>
@@ -115,13 +108,6 @@
             <button id="getTokenButton">Get Token</button>
 
             <div class="response" id="response"></div>
-        </div>
-
-        <div class="secret-section">
-            <button class="collapsible-button" onclick="toggleEnvironment()">Toggle Environment</button>
-            <div class="collapsible-content" id="secretContent">
-                <p><strong>Current Environment:</strong> <span id="currentEnvironment">desenvolvimento</span></p>
-            </div>
         </div>
 
         <div class="documentation">
@@ -194,12 +180,7 @@ DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/{environment}/toke
     </div>
 
     <script>
-        let environment = 'desenvolvimento';
-
-        function toggleEnvironment() {
-            environment = environment === 'desenvolvimento' ? 'production' : 'desenvolvimento';
-            document.getElementById('currentEnvironment').innerText = environment;
-        }
+        const environment = 'desenvolvimento'; // Set environment here
 
         document.getElementById('getTokenButton').addEventListener('click', function() {
             const apiUrl = `https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/${environment}/tokensFunctionPy`;
