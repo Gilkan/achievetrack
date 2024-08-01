@@ -12,9 +12,14 @@
         button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
         button:hover { background-color: #0056b3; }
         .response { margin-top: 20px; }
-        .documentation { margin-top: 20px; }
         .warning { margin-top: 20px; padding: 10px; background-color: #ffcccc; color: #d8000c; border: 1px solid #d8000c; border-radius: 5px; }
         .note { margin-top: 10px; padding: 10px; background-color: #e7f0ff; color: #004085; border: 1px solid #004085; border-radius: 5px; }
+        .collapsible-button { cursor: pointer; padding: 10px; background-color: #007bff; color: white; border: none; text-align: left; width: 100%; }
+        .collapsible-button:hover { background-color: #0056b3; }
+        .collapsible-content { display: none; margin-top: 10px; }
+        .collapsible-content.show { display: block; }
+        .required { color: yellow; }
+        .optional { color: rgba(0, 0, 0, 0.9); }
     </style>
 </head>
 <body>
@@ -33,66 +38,70 @@
         </div>
 
         <div class="documentation">
-            <h2>API Documentation</h2>
-            <h3>Create/Update Achievement</h3>
-            <pre>
+            <button class="collapsible-button" onclick="toggleCollapsible()">Show API Documentation</button>
+            <div class="collapsible-content" id="collapsibleContent">
+                <h2>API Documentation</h2>
+
+                <h3>Create/Update Achievement</h3>
+                <pre>
 POST https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
-    "action": "create",
-    "userId": "string"     // Required: User ID
-    "token": "string"      // Required: Token
-    "name": "string"       // Required: Achievement Name
-    "description": "string"// Optional: Achievement Description
-    "goal": "number"       // Optional: Achievement Goal
-    "details": "string"    // Optional: Additional Details
-    "progress": "number"   // Optional: Current Progress (default: 0)
-    "dateAchieved": "string" // Optional: Date Achieved (default: empty string)
+    "action": "create",                   // <span class="required">Required</span>
+    "userId": "string",                  // <span class="required">Required: User ID</span>
+    "token": "string",                   // <span class="required">Required: Token</span>
+    "name": "string",                    // <span class="required">Required: Achievement Name</span>
+    "description": "string",             // <span class="optional">Optional: Achievement Description</span>
+    "goal": "number",                    // <span class="optional">Optional: Achievement Goal</span>
+    "details": "string",                 // <span class="optional">Optional: Additional Details</span>
+    "progress": "number",                // <span class="optional">Optional: Current Progress (default: 0)</span>
+    "dateAchieved": "string"             // <span class="optional">Optional: Date Achieved (default: empty string)</span>
 }
-            </pre>
+                </pre>
 
-            <h3>Get Achievements List</h3>
-            <pre>
+                <h3>Get Achievements List</h3>
+                <pre>
 GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
-    "action": "get_list",
-    "token": "string"      // Required: Token
+    "action": "get_list",                // <span class="required">Required</span>
+    "token": "string"                    // <span class="required">Required: Token</span>
 }
-            </pre>
+                </pre>
 
-            <h3>Get User Achievement</h3>
-            <pre>
+                <h3>Get User Achievement</h3>
+                <pre>
 GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
-    "action": "get_user_achievement",
-    "userId": "string",    // Required: User ID
-    "token": "string",     // Required: Token
-    "name": "string"       // Required: Achievement Name
+    "action": "get_user_achievement",    // <span class="required">Required</span>
+    "userId": "string",                  // <span class="required">Required: User ID</span>
+    "token": "string",                   // <span class="required">Required: Token</span>
+    "name": "string"                    // <span class="required">Required: Achievement Name</span>
 }
-            </pre>
+                </pre>
 
-            <h3>Get Achievement</h3>
-            <pre>
+                <h3>Get Achievement</h3>
+                <pre>
 GET https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
-    "action": "get_achievement",
-    "token": "string",     // Required: Token
-    "name": "string"       // Required: Achievement Name
+    "action": "get_achievement",         // <span class="required">Required</span>
+    "token": "string",                   // <span class="required">Required: Token</span>
+    "name": "string"                    // <span class="required">Required: Achievement Name</span>
 }
-            </pre>
+                </pre>
 
-            <h3>Delete Achievement</h3>
-            <pre>
+                <h3>Delete Achievement</h3>
+                <pre>
 DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy
 {
-    "action": "delete",
-    "userId": "string",    // Required: User ID
-    "token": "string",     // Required: Token
-    "name": "string"       // Required: Achievement Name
+    "action": "delete",                  // <span class="required">Required</span>
+    "userId": "string",                  // <span class="required">Required: User ID</span>
+    "token": "string",                   // <span class="required">Required: Token</span>
+    "name": "string"                    // <span class="required">Required: Achievement Name</span>
 }
-            </pre>
+                </pre>
 
-            <div class="note">
-                <strong>Note:</strong> The last token received is stored in localStorage under 'apiToken'. If you need to recover it and haven't overwritten or cleared the storage, you can find it there.
+                <div class="note">
+                    <strong>Note:</strong> The last token received is stored in localStorage under 'apiToken'. If you need to recover it and haven't overwritten or cleared the storage, you can find it there.
+                </div>
             </div>
         </div>
     </div>
@@ -124,6 +133,19 @@ DELETE https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/to
                 document.getElementById('response').innerText = 'An error occurred. Please try again.';
             });
         });
+
+        function toggleCollapsible() {
+            var content = document.getElementById('collapsibleContent');
+            var button = document.querySelector('.collapsible-button');
+            
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                button.textContent = 'Show API Documentation';
+            } else {
+                content.classList.add('show');
+                button.textContent = 'Hide API Documentation';
+            }
+        }
     </script>
 </body>
 </html>
