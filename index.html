@@ -12,30 +12,105 @@
         button { padding: 10px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
         button:hover { background-color: #0056b3; }
         .response { margin-top: 20px; }
+        .documentation { margin-top: 20px; }
+        .warning { margin-top: 20px; padding: 10px; background-color: #ffcccc; color: #d8000c; border: 1px solid #d8000c; border-radius: 5px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Acquire Token</h1>
         <p>Click the button below to acquire a token. The token will expire after a set period.</p>
+        
+        <div class="warning">
+            <strong>Warning:</strong> If you lose your token, it cannot be recovered. You will need to create a new one.
+        </div>
 
         <div class="form-container">
             <button id="getTokenButton">Get Token</button>
 
             <div class="response" id="response"></div>
         </div>
+
+        <div class="documentation">
+            <h2>API Documentation</h2>
+            <h3>Create/Update Achievement</h3>
+            <pre>
+POST https://your-api-endpoint.amazonaws.com/achievement
+{
+    "action": "create",
+    "userId": "string",
+    "token": "string",
+    "name": "string",
+    "description": "string",
+    "goal": "number",
+    "details": "string",
+    "progress": "number",
+    "dateAchieved": "string"
+}
+            </pre>
+
+            <h3>Get Achievements List</h3>
+            <pre>
+GET https://your-api-endpoint.amazonaws.com/achievement
+{
+    "action": "get_list",
+    "token": "string"
+}
+            </pre>
+
+            <h3>Get User Achievement</h3>
+            <pre>
+GET https://your-api-endpoint.amazonaws.com/achievement
+{
+    "action": "get_user_achievement",
+    "userId": "string",
+    "token": "string",
+    "name": "string"
+}
+            </pre>
+
+            <h3>Get Achievement</h3>
+            <pre>
+GET https://your-api-endpoint.amazonaws.com/achievement
+{
+    "action": "get_achievement",
+    "token": "string",
+    "name": "string"
+}
+            </pre>
+
+            <h3>Delete Achievement</h3>
+            <pre>
+DELETE https://your-api-endpoint.amazonaws.com/achievement
+{
+    "action": "delete",
+    "userId": "string",
+    "token": "string",
+    "name": "string"
+}
+            </pre>
+        </div>
     </div>
 
     <script>
         document.getElementById('getTokenButton').addEventListener('click', function() {
             // Substitua pelo URL da sua API Gateway
-            const apiUrl = 'https://hwu5xkw240.execute-api.us-east-1.amazonaws.com/desenvolvimento/tokensFunctionPy';
+            const apiUrl = 'https://your-api-endpoint.amazonaws.com/achievement';
 
-            fetch(apiUrl)
+            fetch(apiUrl, {
+                method: 'POST', // Ensure this matches your API method for token creation
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'create', // Specify the action for token creation
+                    userId: 'exampleUserId' // Replace with actual userId if needed
+                })
+            })
             .then(response => response.json())
             .then(data => {
                 if (data.token) {
-                    localStorage.setItem('apiToken', data.token); // Armazena o token
+                    localStorage.setItem('apiToken', data.token); // Store the token
                     document.getElementById('response').innerText = `Token: ${data.token}`;
                 } else {
                     document.getElementById('response').innerText = data.message || 'Unknown error occurred.';
